@@ -21,16 +21,17 @@ def ftn():
          return requests.post(url, headers=headers, data=data)
 
        r= extraction(jdate)
-
        content = BeautifulSoup(r.text, 'lxml')
        all_urls = content.find_all('a')
+       pdf_urls=[]
        for url in all_urls:
-           try:
-               if 'pdf' in url['href']:
-                   print(url['href'])
-           except:
-               pass
 
+               if 'pdf' in url['href']:
+                   p_url=url['href']
+               pdf_urls.append(p_url)
+
+
+       return render_template('home.html',content=pdf_urls)
 
 
 
@@ -39,3 +40,4 @@ def ftn():
 
 if __name__=='__main__':
     app.run(debug=True)
+
