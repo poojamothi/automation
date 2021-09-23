@@ -17,7 +17,10 @@ def ftn():
          headers = CaseInsensitiveDict()
          headers["Content-Type"] = "application/x-www-form-urlencoded"
 
-         data = "juddt=date&Submit=Submit"
+         # data = "juddt=date&Submit=Submit"
+         data = dict()
+         data["juddt"] = date
+         data["Submit"] = "Submit"
          response= requests.post(url, headers=headers, data=data)
          content = BeautifulSoup(response.text, 'lxml')
          return content
@@ -31,7 +34,6 @@ def ftn():
                if 'pdf' in url['href']:
                    p_url=url['href']
                pdf_urls.append(p_url)
-
 
        return render_template('home.html',content=pdf_urls)
 
