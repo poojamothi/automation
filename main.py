@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 app=Flask(__name__)
 @app.route('/',methods=['GET','POST'])
 def ftn():
-    if request.method=='POST':
+    if request.method =='POST':
        if 'jdate' in request.form:
           jdate=request.form['jdate']
 
@@ -17,12 +17,14 @@ def ftn():
          headers = CaseInsensitiveDict()
          headers["Content-Type"] = "application/x-www-form-urlencoded"
 
-         data = "jddate=date&Submit=Submit"
-         return requests.post(url, headers=headers, data=data)
+         data = "juddt=date&Submit=Submit"
+         response= requests.post(url, headers=headers, data=data)
+         content = BeautifulSoup(response.text, 'lxml')
+         return content
 
        r= extraction(jdate)
-       content = BeautifulSoup(r.text, 'lxml')
-       all_urls = content.find_all('a')
+
+       all_urls = r.find_all('a')
        pdf_urls=[]
        for url in all_urls:
 
