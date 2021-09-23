@@ -21,3 +21,5 @@ for url in all_urls:
             print(url['href'])
     except:
         pass
+
+    
