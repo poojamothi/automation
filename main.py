@@ -2,6 +2,11 @@ from flask import Flask,request,render_template
 import requests
 from requests.structures import CaseInsensitiveDict
 from bs4 import BeautifulSoup
+import re
+from urllib.parse import  unquote
+from datetime import datetime
+
+import os
 app=Flask(__name__)
 @app.route('/',methods=['GET','POST'])
 def ftn():
@@ -23,17 +28,39 @@ def ftn():
          data["Submit"] = "Submit"
          response= requests.post(url, headers=headers, data=data)
          content = BeautifulSoup(response.text, 'lxml')
+
          return content
 
-       r= extraction(jdate)
-
-       all_urls = r.find_all('a')
+       r = extraction(jdate)
        pdf_urls=[]
-       for url in all_urls:
+       all_urls = r.find_all('a')
+       if 'download' in request.form:
+         path="D:/pdf"
 
+         try:
+             os.mkdir(path)
+             print("folder created")
+         except FileExistsError:
+             print("file already exists")
+         for url in all_urls:
+           try:
                if 'pdf' in url['href']:
-                   p_url=url['href']
-               pdf_urls.append(p_url)
+                   pdf_url=''
+                   pdf_url=url['href']
+                   print('HTTP GET: %s',pdf_url)
+                   pdf_response=requests.get(pdf_url)
+                   filename=unquote(pdf_response.url).split('/')[-1].replace(' ','_')
+                   with open('./pdf/'+filename,'wb') as f:
+                       f.write(pdf_response.content)
+
+               pdf_urls= pdf_urls.append(pdf_url)
+
+
+           except:
+               pass
+
+
+
 
        return render_template('home.html',content=pdf_urls)
 
@@ -44,4 +71,3 @@ def ftn():
 
 if __name__=='__main__':
     app.run(debug=True)
-
