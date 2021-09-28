@@ -1,0 +1,30 @@
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <title>website</title>
+</head>
+<body>
+  <div class='header' align='center'>
+     <h1>PDF Downloader</h1>
+  </div></br></br>
+  <div class='jdate' >
+    <form method="post"action="/">
+  <h3>Judgement Date</h3>
+  <input type="text" name="jdate" id="jdate" placeholder="Enter judgement date" >
+  <button name="sdate" value="sdate"  id="sdate" type="submit" onclick="document.getElementById('jdate').value" >Submit</button></br></br>
+
+      </div>
+  <div class='wbody' align='center'>
+  <h2>pdf urls</h2></br>
+   {% for x in content %}
+      <p>{{x}}</p>
+    {% endfor %}
+    </br></br>
+   </div>
+  </form>
+<form action="/download/" method="post">
+
+    <button id="download" name="download" type="submit" >Download</button>
+</form>
+
+</body>
+</html>
