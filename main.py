@@ -56,7 +56,7 @@ def ftn():
 
        for url in all_urls:
            #try:
-            if 'pdf' in url['href']:
+            if 'pdf' in url['href'] and jdate in url['href']:
                p_url=str(url['href'])
                pdf_urls.append(p_url)
                print('HTTP GET: %s', p_url)
