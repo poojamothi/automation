@@ -1,18 +1,21 @@
-from flask import Flask,request,render_template
+from flask import Flask,request,render_template,send_file
 import requests
 from requests.structures import CaseInsensitiveDict
 from bs4 import BeautifulSoup
-import re
 from urllib.parse import  unquote
+import zipfile
+import shutil
 from datetime import datetime
 
 import os
 app=Flask(__name__)
+
 @app.route('/',methods=['GET','POST'])
 def ftn():
     if request.method =='POST':
        if 'jdate' in request.form:
           jdate=request.form['jdate']
+          #date_obj=datetime.strptime(jdate,'%d-%m-%y')
 
 
 
@@ -32,42 +35,75 @@ def ftn():
          return content
 
        r = extraction(jdate)
-       pdf_urls=[]
+
        all_urls = r.find_all('a')
-       if 'download' in request.form:
-         path="D:/pdf"
 
-         try:
-             os.mkdir(path)
-             print("folder created")
-         except FileExistsError:
-             print("file already exists")
-         for url in all_urls:
-           try:
-               if 'pdf' in url['href']:
-                   pdf_url=''
-                   pdf_url=url['href']
-                   print('HTTP GET: %s',pdf_url)
-                   pdf_response=requests.get(pdf_url)
-                   filename=unquote(pdf_response.url).split('/')[-1].replace(' ','_')
-                   with open('./pdf/'+filename,'wb') as f:
-                       f.write(pdf_response.content)
+         #path="D:/pdf"
 
-               pdf_urls= pdf_urls.append(pdf_url)
+         #try:
+           #os.mkdir(path)
+           #print("folder created")
+            # except FileExistsError:
+             #print("file already exists")
+       pdf_urls=[]
+       path = "D:/pdf"
 
+       try:
+           os.mkdir(path)
+           print("folder created")
+       except FileExistsError:
+           print("file already exists")
 
-           except:
-               pass
-
-
-
-
-       return render_template('home.html',content=pdf_urls)
+       for url in all_urls:
+           #try:
+            if 'pdf' in url['href'] and jdate in url['href']:
+               p_url=str(url['href'])
+               pdf_urls.append(p_url)
+               print('HTTP GET: %s', p_url)
+               pdf_response = requests.get(p_url)
+               filename = unquote(pdf_response.url).split('/')[-1].replace(' ', '_')
 
 
+               with open("D:/pdf/"+ filename, 'wb') as pdf:
+                   pdf.write(pdf_response.content)
 
+
+       return render_template('home.html', content=pdf_urls)
     else:
-        return render_template('home.html')
+       return render_template('home.html')
+
+
+
+
+
+
+@app.route('/download/',methods=['POST'])
+def downloadFile():
+    zipf = zipfile.ZipFile('judpdf.zip', 'w', zipfile.ZIP_DEFLATED)
+    for root, dirs, files in os.walk(r"D:/pdf"):
+        for file in files:
+            if file.endswith('.pdf'):
+                print(file)
+                zipf.write("D:/pdf/"+ file)
+    zipf.close()
+    try:
+        shutil.rmtree("D:/pdf/")
+        print("folder is deleted")
+    except OSError as e:
+        print("Error: %s - %s." % (e.filename, e.strerror))
+    return send_file('judpdf.zip', mimetype='zip',attachment_filename='judpdf.zip',as_attachment=True)
+
+
+           #except:
+               #pass
+
+
+
+
+
+
+
+
 
 if __name__=='__main__':
     app.run(debug=True)
