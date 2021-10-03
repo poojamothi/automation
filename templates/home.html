@@ -9,8 +9,12 @@
   <div class='jdate' >
     <form method="post"action="/">
   <h3>Judgement Date</h3>
-  <input type="text" name="jdate" id="jdate" placeholder="Enter judgement date" >
-  <button name="sdate" value="sdate"  id="sdate" type="submit" onclick="document.getElementById('jdate').value" >Submit</button></br></br>
+
+<label for="fdate"><b>From</b></label>
+        <input type="text" name="fdate" id="fdate" placeholder="dd-mm-yyy" ></br></br>
+        <label for="todate"><b>To</b></label>
+        <input type="text" name="todate" id="todate" placeholder="dd-mm-yyy" >
+  <button name="sdate" value="sdate"  id="sdate" type="submit" onclick="document.getElementById('fdate & todate').value" >Submit</button></br></br>
 
       </div>
   <div class='wbody' align='center'>
@@ -21,11 +25,17 @@
     </br></br>
    </div>
   </form>
- <div class="footer" align="center">
+  <div class="footer" align="center">
 <form action="/download/" method="post">
 
     <button id="download" name="download" type="submit" >Download</button>
 </form>
-</div>
+
+  </div>
+
+
+
+
 </body>
 </html>
+
