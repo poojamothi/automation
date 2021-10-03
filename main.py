@@ -7,12 +7,7 @@ import zipfile
 import shutil
 import pathlib
 from pathlib import Path
-
 import datetime
-
-
-
-
 app=Flask(__name__)
 
 @app.route('/',methods=['GET','POST'])
@@ -115,12 +110,6 @@ def downloadFile():
 
            #except:
                #pass
-
-
-
-
-
-
 
 
 
