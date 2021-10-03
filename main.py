@@ -10,6 +10,8 @@ from pathlib import Path
 import datetime
 app=Flask(__name__)
 
+path = "download_pdf/"
+
 @app.route('/',methods=['GET','POST'])
 def ftn():
     if request.method =='POST':
@@ -57,7 +59,7 @@ def ftn():
 
 
 
-       path = "D:/pdf"
+#        path = "D:/pdf"
 
        try:
            pathlib.Path(path).mkdir(parents=True, exist_ok=True)
@@ -79,7 +81,8 @@ def ftn():
                filename = unquote(pdf_response.url).split('/')[-1].replace(' ', '_')
 
 
-               with open("D:/pdf/"+ filename, 'wb') as pdf:
+#                with open("D:/pdf/"+ filename, 'wb') as pdf:
+               with open(path + filename, 'wb') as pdf:
                     pdf.write(pdf_response.content)
 
 
@@ -94,14 +97,16 @@ def ftn():
 
 @app.route('/download/',methods=['POST'])
 def downloadFile():
-    dir = Path(r"D:/pdf")
+    # dir = Path(r"D:/pdf")
+    dir = Path(path)
 
     with zipfile.ZipFile('judpdf.zip', "w", zipfile.ZIP_DEFLATED) as zip_file:
         for entry in dir.rglob("*"):
             zip_file.write(entry, entry.relative_to(dir))
 
     try:
-        shutil.rmtree("D:/pdf/")
+        # shutil.rmtree("D:/pdf/")
+        shutil.rmtree(path)
         print("folder is deleted")
     except OSError as e:
         print("Error: %s - %s." % (e.filename, e.strerror))
