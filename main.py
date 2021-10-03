@@ -46,7 +46,8 @@ def ftn():
 
        start = datetime.datetime.strptime(fdate, "%d-%m-%Y")
        end = datetime.datetime.strptime(todate, "%d-%m-%Y")
-       date_generated = [start + datetime.timedelta(days=x) for x in range(0, (end - start).days)]
+       date_generated = [start + datetime.timedelta(days=x) for x in range(0, (end - start).days + 1)]
+       print("date_generated:", date_generated)
 
        for single_date in date_generated:
            d=single_date.strftime("%d-%m-%Y")
