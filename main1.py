@@ -85,9 +85,9 @@ def ftn():
                     pdf.write(pdf_response.content)
 
 
-       return render_template('home.html', content=pdf_urls)
+       return render_template('home1.html', content=pdf_urls)
     else:
-       return render_template('home.html')
+       return render_template('home1.html')
 
 
 
