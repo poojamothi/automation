@@ -3,8 +3,8 @@ import cv2
 import pathlib
 from PIL import Image
 import numpy as np
-import cv2
-import tensorflow as tf
+
+
 
 from pathlib import Path
 path="D:/pdf"
